@@ -1,9 +1,10 @@
-import "./css/style.css";
+import "../../css/style.css";
 
 import { Inter, Caveat } from "next/font/google";
 import localFont from "next/font/local";
-import Theme from "./theme-provider";
+import Theme from "../../theme-provider";
 import Header from "@/components/ui/header";
+import QuoteTitle from "@/components/quote-title";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -20,7 +21,7 @@ const caveat = Caveat({
 const orbiter = localFont({
   src: [
     {
-      path: "../public/fonts/OrbiterDisplay-Bold.woff",
+      path: "../../../public/fonts/OrbiterDisplay-Bold.woff",
       weight: "700",
     },
   ],
@@ -39,16 +40,25 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       {/* suppressHydrationWarning: https://github.com/vercel/next.js/issues/44343 */}
       <body
         className={`${inter.variable} ${caveat.variable} ${orbiter.variable} font-inter antialiased bg-white text-slate-800 dark:bg-slate-950 dark:text-slate-200 tracking-tight`}
       >
         <Theme>
-          <Header />
-          <main className="max-w-xl lg:max-w-[calc(50%+theme(maxWidth.xl))] mx-auto px-4 sm:px-6 pt-16">
-            {children}
-          </main>
+          <div className="flex flex-col min-h-screen overflow-hidden">
+            <Header />
+
+            <div className="grow flex flex-col lg:flex-row">
+              {/* Left side */}
+              <QuoteTitle title="The Markyk Corp." date="20 April, 2024" />
+
+              {/* Right side */}
+              <main className="max-lg:grow flex flex-col w-full lg:w-1/2 lg:ml-auto">
+                {children}
+              </main>
+            </div>
+          </div>
         </Theme>
       </body>
     </html>

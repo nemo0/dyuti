@@ -19,6 +19,10 @@ const UserSchema = new Schema(
       max: 50,
       unique: true,
     },
+    onboarded: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
