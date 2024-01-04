@@ -23,6 +23,12 @@ const UserSchema = new Schema(
       type: Boolean,
       default: false,
     },
+    businesses: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Business",
+      },
+    ],
   },
   { timestamps: true }
 );

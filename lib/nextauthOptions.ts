@@ -7,6 +7,7 @@ import { UserModel } from "@/models/user";
 
 export const nextauthOptions: AuthOptions = {
   // Configure one or more authentication providers
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_OAUTH_CLIENT_ID!,
@@ -32,13 +33,16 @@ export const nextauthOptions: AuthOptions = {
 
       return true;
     },
-    async session({ session, token }: { session: Session; token: any }) {
+    async session({ session, token }) {
       // Add property to session, like an access_token from a provider.
       if (token && session) {
         await connectDB();
-        const user = await UserModel.findOne({ email: token.email });
 
-        session.user.id = user?._id;
+        const user = await UserModel.findOne({
+          email: token.email,
+        });
+
+        session.user._id = user?._id;
       }
       return session;
     },
