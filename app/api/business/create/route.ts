@@ -11,7 +11,7 @@ export async function POST(request: NextRequest) {
     if (!session) {
       return NextResponse.json(
         {
-          error: "You must be signed in to create a business.",
+          message: "You must be signed in to create a business.",
           success: false,
         },
         {
@@ -40,7 +40,7 @@ export async function POST(request: NextRequest) {
     if (businessNameExists) {
       return NextResponse.json(
         {
-          error: "Business name already exists.",
+          message: "Business name already exists.",
           success: false,
         },
         {
@@ -56,7 +56,7 @@ export async function POST(request: NextRequest) {
     if (businessPhoneExists) {
       return NextResponse.json(
         {
-          error: "Business phone already exists.",
+          message: "Business phone already exists.",
           success: false,
         },
         {
@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
     if (businessEmailExists) {
       return NextResponse.json(
         {
-          error: "Business email already exists.",
+          message: "Business email already exists.",
           success: false,
         },
         {
@@ -88,7 +88,7 @@ export async function POST(request: NextRequest) {
     if (businessWebsiteExists) {
       return NextResponse.json(
         {
-          error: "Business website already exists.",
+          message: "Business website already exists.",
           success: false,
         },
         {
@@ -119,13 +119,14 @@ export async function POST(request: NextRequest) {
     );
 
     return NextResponse.json({
+      message: "Business created successfully.",
       success: true,
       business,
     });
   } catch (error) {
     console.log(error);
     return NextResponse.json({
-      error: "Something went wrong.",
+      message: "Something went wrong.",
       success: false,
     });
   }

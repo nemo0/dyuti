@@ -29,6 +29,18 @@ const UserSchema = new Schema(
         ref: "Business",
       },
     ],
+    clients: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Client",
+      },
+    ],
+    items: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Item",
+      },
+    ],
   },
   { timestamps: true }
 );
