@@ -2,22 +2,32 @@
 
 import React from "react";
 import { MoveRight, Loader } from "lucide-react";
-import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
+import {
+  useForm,
+  SubmitHandler,
+  FormProvider,
+  Controller,
+} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
-import { CustomInput, CustomSelect, CustomTextArea } from "../ui/inputs";
+import {
+  CustomInput,
+  CustomSelect,
+  CustomTextArea,
+  ReactSelect,
+} from "../ui/inputs";
 
 const inputSchema = z.object({
   itemType: z.enum(["Product", "Service"]),
   itemName: z.string().min(3, "Name must be at least 3 characters"),
-  itemUnit: z.string().optional(),
+  itemUnit: z.string(),
   itemSellingPrice: z
     .string({
       invalid_type_error: "Invalid name",
       required_error: "Name is required",
     })
-    .min(3, "Name must be at least 3 characters"),
+    .min(1, "Selling price must be at least 1 characters"),
   itemDescription: z.string().optional(),
 });
 
@@ -53,6 +63,19 @@ export default function CreateItemForm() {
       setLoading(false);
     }
   };
+
+  interface ICategory {
+    value: string;
+    label: string;
+  }
+
+  const ops: ICategory[] = [
+    { value: "USD", label: "USD" },
+    { value: "CAD", label: "CAD" },
+    { value: "EUR", label: "EUR" },
+    { value: "GBP", label: "GBP" },
+    { value: "AUD", label: "AUD" },
+  ];
 
   return (
     <FormProvider {...methods}>
@@ -90,37 +113,38 @@ export default function CreateItemForm() {
             </div>
           </div>
 
-          <CustomInput
-            name="itemName"
-            label="Name"
-            error={errors.itemName}
-            required
-          />
-
-          <CustomSelect
-            name="itemUnit"
-            label="Unit"
-            error={errors.itemUnit}
-            options={[
-              { value: "USD", label: "USD" },
-              { value: "CAD", label: "CAD" },
-              { value: "EUR", label: "EUR" },
-              { value: "GBP", label: "GBP" },
-              { value: "AUD", label: "AUD" },
-            ]}
-          />
+          <CustomInput name="itemName" label="Name" error={errors.itemName} />
 
           <CustomInput
             name="itemSellingPrice"
             label="Selling Price"
             error={errors.itemSellingPrice}
-            required
+            type="number"
           />
 
           <CustomTextArea
             name="itemDescription"
             label="Description"
             error={errors.itemDescription}
+          />
+
+          <Controller
+            name="itemUnit"
+            control={methods.control}
+            render={({ field: { onChange, value, ref } }) => (
+              <ReactSelect
+                name="itemUnit"
+                inputRef={ref}
+                label="Item Unit"
+                defaultValue={ops[0].value}
+                value={ops.find((op) => op.value === value)}
+                error={errors.itemUnit}
+                options={ops}
+                onChange={(selectedOption: any) => {
+                  return onChange(selectedOption.value);
+                }}
+              />
+            )}
           />
 
           <button

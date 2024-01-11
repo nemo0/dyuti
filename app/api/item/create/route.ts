@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
 
     const item = await ItemModel.create({
       ...body,
+      itemOwner: session.user._id,
     });
 
     const { _id } = item;

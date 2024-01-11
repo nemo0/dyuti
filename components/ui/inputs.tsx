@@ -1,5 +1,7 @@
 import { Dot } from "lucide-react";
 import { FieldError, useFormContext } from "react-hook-form";
+import Select, { GroupBase } from "react-select";
+import { Options } from "react-select";
 
 interface CustomInputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
@@ -119,6 +121,70 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({
           </option>
         ))}
       </select>
+      <label
+        htmlFor={name}
+        className="absolute text-sm top-[15%] scale-95 -translate-y-4 start-1 bg-white dark:bg-slate-950 px-2"
+      >
+        {label}
+      </label>
+      {error && (
+        <div className="text-red-500 text-xs mt-2 inline-flex items-center">
+          <span className="animate-ping">
+            {/* Replace <Dot> with your error icon component */}
+            <Dot color="rgb(239 68 68)" size="1rem" />
+          </span>
+          {error.message ?? "This field is required"}
+        </div>
+      )}
+    </div>
+  );
+};
+
+interface ReactSelectProps
+  extends React.SelectHTMLAttributes<HTMLSelectElement> {
+  name: string;
+  label: string;
+  options: unknown[];
+  inputRef?: any;
+  value?: any;
+  error?: FieldError | undefined;
+}
+
+export const ReactSelect: React.FC<ReactSelectProps> = ({
+  name,
+  label,
+  options,
+  error,
+  inputRef,
+  value,
+  ...props
+}) => {
+  return (
+    <div className="relative w-full mt-4">
+      <Select
+        id={name}
+        classNamePrefix={"rs"}
+        className="rs-container block px-2.5 py-2.5 w-full dark:bg-slate-950 bg-transparent rounded-md border-1 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+        options={options}
+        // @ts-ignore-next-line
+        inputRef={inputRef}
+        value={value}
+        {...props}
+        styles={{
+          control: (baseStyles, state) => ({
+            ...baseStyles,
+            border: "none",
+            boxShadow: "none",
+          }),
+          input: (baseStyles, state) => ({
+            ...baseStyles,
+            boxShadow: "none",
+            ":focus": {
+              boxShadow: "none !important",
+            },
+          }),
+        }}
+      />
       <label
         htmlFor={name}
         className="absolute text-sm top-[15%] scale-95 -translate-y-4 start-1 bg-white dark:bg-slate-950 px-2"

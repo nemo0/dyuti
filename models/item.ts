@@ -19,6 +19,10 @@ const ItemSchema = new Schema({
   itemDescription: {
     type: String,
   },
+  itemOwner: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 export type ItemModel = InferSchemaType<typeof ItemSchema>;

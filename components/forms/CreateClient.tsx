@@ -2,11 +2,21 @@
 
 import React, { useEffect } from "react";
 import { MoveRight, Loader, Recycle } from "lucide-react";
-import { useForm, SubmitHandler, FormProvider } from "react-hook-form";
+import {
+  useForm,
+  SubmitHandler,
+  FormProvider,
+  Controller,
+} from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "sonner";
-import { CustomInput, CustomSelect, CustomTextArea } from "../ui/inputs";
+import {
+  CustomInput,
+  CustomSelect,
+  CustomTextArea,
+  ReactSelect,
+} from "../ui/inputs";
 
 const inputSchema = z.object({
   customerType: z.enum(["Business", "Individual"]),
@@ -86,6 +96,19 @@ export default function CreateClientForm() {
     }
   };
 
+  const ops = [
+    { value: "USD", label: "USD" }, // United States Dollar
+    { value: "EUR", label: "EUR" }, // Euro
+    { value: "JPY", label: "JPY" }, // Japanese Yen
+    { value: "GBP", label: "GBP" }, // British Pound Sterling
+    { value: "AUD", label: "AUD" }, // Australian Dollar
+    { value: "CAD", label: "CAD" }, // Canadian Dollar
+    { value: "CHF", label: "CHF" }, // Swiss Franc
+    { value: "CNY", label: "CNY" }, // Chinese Yuan
+    { value: "HKD", label: "HKD" }, // Hong Kong Dollar
+    { value: "INR", label: "INR" }, // Indian Rupee
+  ];
+
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
@@ -154,7 +177,7 @@ export default function CreateClientForm() {
             // placeholder="Enter Customer Email"
           />
 
-          <CustomSelect
+          {/* <CustomSelect
             name="currency"
             label="Currency"
             error={errors.currency}
@@ -165,6 +188,25 @@ export default function CreateClientForm() {
               { value: "GBP", label: "GBP" },
               { value: "AUD", label: "AUD" },
             ]}
+          /> */}
+
+          <Controller
+            name="currency"
+            control={methods.control}
+            render={({ field: { onChange, value, ref } }) => (
+              <ReactSelect
+                name="itemUnit"
+                inputRef={ref}
+                label="Item Unit"
+                defaultValue={ops[0].value}
+                value={ops.find((op) => op.value === value)}
+                error={errors.currency}
+                options={ops}
+                onChange={(selectedOption: any) => {
+                  return onChange(selectedOption.value);
+                }}
+              />
+            )}
           />
 
           <CustomInput

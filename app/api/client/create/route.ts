@@ -26,6 +26,7 @@ export async function POST(request: NextRequest) {
 
     const client = await ClientModel.create({
       ...body,
+      customerOwner: session.user._id,
     });
 
     const { _id } = client;

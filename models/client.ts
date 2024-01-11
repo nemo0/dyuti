@@ -50,6 +50,10 @@ const ClientSchema = new Schema({
   customerShippingZip: {
     type: String,
   },
+  customerOwner: {
+    type: Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 export type ClientModel = InferSchemaType<typeof ClientSchema>;
